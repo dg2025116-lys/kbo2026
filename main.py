@@ -267,6 +267,12 @@ df_players["age"]   = 2024 - df_players["birth"]
 # ══════════════════════════════════════════════════════════════════════════════
 # Plotly 공통 테마
 # ══════════════════════════════════════════════════════════════════════════════
+def hex_to_rgba(hex_color: str, alpha: float = 0.2) -> str:
+    """#RRGGBB → 'rgba(r,g,b,alpha)'"""
+    h = hex_color.lstrip("#")
+    r, g, b = int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+    return f"rgba({r},{g},{b},{alpha})"
+
 PLOTLY_LAYOUT = dict(
     font=dict(family="Noto Sans KR, sans-serif", color="#0A1628"),
     paper_bgcolor="rgba(0,0,0,0)",
@@ -444,7 +450,7 @@ elif selected_section == "📈 연도별 추이":
             x=pivot_norm.index, y=pivot_norm[team],
             name=team,
             stackgroup="one",
-            fillcolor=TEAMS[team]["color"] + "CC",
+            fillcolor=hex_to_rgba(TEAMS[team]["color"], 0.8),
             line=dict(color=TEAMS[team]["color"], width=0.5),
             hovertemplate=f"<b>{team}</b><br>%{{x}}년: %{{y:.1f}}%<extra></extra>",
         ))
@@ -547,7 +553,7 @@ elif selected_section == "🗺️ 지역·연령·성별":
         fig4.add_trace(go.Scatterpolar(
             r=vals_closed, theta=angles_closed,
             name=team, fill="toself",
-            fillcolor=TEAMS[team]["color"] + "33",
+            fillcolor=hex_to_rgba(TEAMS[team]["color"], 0.2),
             line=dict(color=TEAMS[team]["color"], width=2),
         ))
     apply_theme(fig4, "")
